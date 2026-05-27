@@ -1,0 +1,6 @@
+{
+  "name": "CS Exit Exam Prep",
+  "description": "An AI-powered preparation platform for Computer Science Exit Exams, featuring structured study, timed mock exams, flashcards, dynamic test generators, and an interactive AI tutor.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
