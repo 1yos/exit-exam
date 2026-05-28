@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import Lessons from "./components/Lessons";
+import StudyNotes from "./components/StudyNotes";
 import Practice from "./components/Practice";
 import MockExam from "./components/MockExam";
 import Flashcards from "./components/Flashcards";
@@ -12,7 +13,12 @@ import { StudentProgress, Question, ChatMessage } from "./types";
 import { SEEDED_QUESTIONS } from "./questionsData";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("cs_exit_active_tab") || "dashboard";
+    }
+    return "dashboard";
+  });
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
@@ -30,44 +36,94 @@ export default function App() {
     });
   };
   
+  // Sync tab navigation state to resume on correct screen
+  useEffect(() => {
+    localStorage.setItem("cs_exit_active_tab", activeTab);
+  }, [activeTab]);
+
   // Question context for AI tutor
-  const [activeTutorQuestion, setActiveTutorQuestion] = useState<Question | null>(null);
+  const [activeTutorQuestion, setActiveTutorQuestion] = useState<Question | null>(() => {
+    try {
+      const saved = localStorage.getItem("cs_exit_active_tutor_question");
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      return null;
+    }
+  });
   
   // AI Tutor message histories
-  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>(() => {
+    try {
+      const saved = localStorage.getItem("cs_exit_chat_history");
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cs_exit_chat_history", JSON.stringify(chatHistory));
+  }, [chatHistory]);
+
+  useEffect(() => {
+    if (activeTutorQuestion) {
+      localStorage.setItem("cs_exit_active_tutor_question", JSON.stringify(activeTutorQuestion));
+    } else {
+      localStorage.removeItem("cs_exit_active_tutor_question");
+    }
+  }, [activeTutorQuestion]);
 
   const [questions, setQuestions] = useState<Question[]>(SEEDED_QUESTIONS);
-  const [selectedCategoryForPractice, setSelectedCategoryForPractice] = useState<string>("Programming Fundamentals");
+  const [selectedCategoryForPractice, setSelectedCategoryForPractice] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("cs_exit_selected_practice_category") || "Programming Fundamentals";
+    }
+    return "Programming Fundamentals";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cs_exit_selected_practice_category", selectedCategoryForPractice);
+  }, [selectedCategoryForPractice]);
 
   // Core Progress State
-  const [progress, setProgress] = useState<StudentProgress>({
-    categoryMastery: {
-      "Programming Fundamentals": 0,
-      "Data Structures & Algorithms": 0,
-      "Database Systems": 0,
-      "Operating Systems": 0,
-      "Computer Networks": 0,
-      "Software Engineering": 0,
-      "Object-Oriented Programming": 0,
-      "Web Development": 0,
-      "Computer Architecture": 0,
-      "Theory of Computation": 0,
-      "Artificial Intelligence": 0,
-      "Cybersecurity": 0,
-      "Discrete Mathematics": 0,
-      "Compiler Design": 0,
-      "Distributed Systems": 0
-    },
-    overallReadiness: 0,
-    studyStreak: 1,
-    lastActiveDate: new Date().toISOString(),
-    completedQuizzes: [],
-    completedExams: [],
-    savedQuestions: [],
-    notes: {},
-    unlockedDifficulties: {
-      "Programming Fundamentals": "Easy"
+  const [progress, setProgress] = useState<StudentProgress>(() => {
+    try {
+      const saved = localStorage.getItem("cs_exit_student_progress");
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error("Failed to restore progress from localStorage", e);
     }
+    return {
+      categoryMastery: {
+        "Programming Fundamentals": 0,
+        "Data Structures & Algorithms": 0,
+        "Database Systems": 0,
+        "Operating Systems": 0,
+        "Computer Networks": 0,
+        "Software Engineering": 0,
+        "Object-Oriented Programming": 0,
+        "Web Development": 0,
+        "Computer Architecture": 0,
+        "Theory of Computation": 0,
+        "Artificial Intelligence": 0,
+        "Cybersecurity": 0,
+        "Discrete Mathematics": 0,
+        "Compiler Design": 0,
+        "Distributed Systems": 0
+      },
+      overallReadiness: 0,
+      studyStreak: 1,
+      lastActiveDate: new Date().toISOString(),
+      completedQuizzes: [],
+      completedExams: [],
+      savedQuestions: [],
+      notes: {},
+      unlockedDifficulties: {
+        "Programming Fundamentals": "Easy"
+      }
+    };
   });
 
   // Fetch initial state from the server database
@@ -77,7 +133,12 @@ export default function App() {
         const res = await fetch("/api/progress");
         if (res.ok) {
           const data = await res.json();
-          setProgress(data);
+          // Synthesize server data only if there's no local progress or if the user cleared storage
+          const localSaved = localStorage.getItem("cs_exit_student_progress");
+          if (!localSaved && data) {
+            setProgress(data);
+            localStorage.setItem("cs_exit_student_progress", JSON.stringify(data));
+          }
         }
       } catch (e) {
         console.error("Failed to load initial progress from server", e);
@@ -86,9 +147,14 @@ export default function App() {
     loadInitialData();
   }, []);
 
-  // Sync progress state back to server
+  // Sync progress state back to server and localStorage
   const saveProgress = async (newProgress: StudentProgress) => {
     setProgress(newProgress);
+    try {
+      localStorage.setItem("cs_exit_student_progress", JSON.stringify(newProgress));
+    } catch (e) {
+      console.warn("Storage write limit or exception on local save", e);
+    }
     try {
       await fetch("/api/progress/save", {
         method: "POST",
@@ -192,6 +258,14 @@ export default function App() {
             <Lessons 
               progress={progress} 
               saveProgress={saveProgress} 
+            />
+          )}
+
+          {activeTab === "studynotes" && (
+            <StudyNotes 
+              progress={progress} 
+              saveProgress={saveProgress} 
+              onAskTutor={handleAskTutor}
             />
           )}
 

@@ -40,6 +40,7 @@ export default function Sidebar({
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "lessons", label: "Study Topics", icon: BookOpen },
+    { id: "studynotes", label: "Study Notes & Quiz", icon: Bookmark },
     { id: "practice", label: "Practice Track", icon: GraduationCap },
     { id: "exams", label: "Timed Mock Exams", icon: Clock },
     { id: "flashcards", label: "Flashcards", icon: Zap },
