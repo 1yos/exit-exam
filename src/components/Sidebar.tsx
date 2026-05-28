@@ -10,7 +10,8 @@ import {
   Moon, 
   Sparkles,
   Bookmark,
-  ChevronLeft
+  ChevronLeft,
+  HelpCircle
 } from "lucide-react";
 
 interface SidebarProps {
@@ -41,6 +42,7 @@ export default function Sidebar({
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "lessons", label: "Study Topics", icon: BookOpen },
     { id: "studynotes", label: "Study Notes & Quiz", icon: Bookmark },
+    { id: "questions", label: "Questions Repository", icon: HelpCircle },
     { id: "practice", label: "Practice Track", icon: GraduationCap },
     { id: "exams", label: "Timed Mock Exams", icon: Clock },
     { id: "flashcards", label: "Flashcards", icon: Zap },

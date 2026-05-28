@@ -189,10 +189,10 @@ export default function Dashboard({
             <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">Items saved for review</p>
           </div>
           <button 
-            onClick={() => setActiveTab("practice")}
+            onClick={() => setActiveTab("questions")}
             className="text-[10px] uppercase tracking-widest font-bold text-[#F27D26] hover:underline text-left cursor-pointer flex items-center space-x-1"
           >
-            <span>PRACTICE SAVED</span>
+            <span>BROWSE ALL QUESTIONS</span>
             <ChevronRight className="h-3 w-3" />
           </button>
         </div>

@@ -500,6 +500,329 @@ Processes cycle through several states managed by the operating system scheduler
         ]
       }
     ]
+  },
+  {
+    category: "Object-Oriented Programming",
+    chapters: [
+      {
+        chapterId: "oop_ch1",
+        chapterNumber: 1,
+        title: "Dynamic Polymorphism, Inheritance Limits, and Runtime Dispatch",
+        summary: "Trace how compilers resolve overridden methods vs overloaded signatures at runtime under dynamic referencing.",
+        contentMarkdown: `
+# 1. Method Overriding vs Method Overloading
+
+For the national exit exam, you must distinguish between these two core OOP concepts:
+
+* **Method Overriding (Dynamic/Runtime Polymorphism):** Occurs when a subclass provides a specific implementation of a method that is already defined in its parent superclass.
+  * **Rules:** Same method name, same parameter list, same return type.
+  * **Mechanism:** Resolved dynamically at runtime based on the actual instantiated object type.
+* **Method Overloading (Static/Compile-time Polymorphism):** Occurs when multiple methods in the same class share the same name but have different parameter lists (signatures).
+  * **Rules:** Must differ in the number, types, or order of parameters. Return type alone is *not* sufficient to distinguish overloaded methods.
+  * **Mechanism:** Resolved at compile-time by the compiler matching local argument types.
+
+---
+
+# 2. Polymorphic Variables & Child Instantiation
+In Java and C++, a reference variable of a parent class type can point to a child subclass object:
+\`\`\`java
+Base obj = new Derived();
+obj.display(); // Invokes the subclass overridden display method!
+\`\`\`
+This dynamic selection of overridden methods based on the object's original instantiated class type is called **Dynamic Method Dispatch**.
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_oop_1_1",
+            questionText: "Which concept refers to an object of a subclass being utilized wherever its parent superclass object is expected?",
+            options: [
+              "Method Overloading",
+              "Encapsulation",
+              "Polymorphism",
+              "Method Obsolescence"
+            ],
+            correctAnswer: "C",
+            explanation: "Polymorphism (specifically subtype polymorphism) allows subclass instances to be bound to parent variables and handled interchangeably at runtime."
+          }
+        ]
+      },
+      {
+        chapterId: "oop_ch2",
+        chapterNumber: 2,
+        title: "Access Control Specifications, Package Boundaries, and Class Visibility",
+        summary: "Analyze the Java/C++ visibility scopes of private, protected, public, and default keywords.",
+        contentMarkdown: `
+# 1. Access Modifiers Grid
+
+Access control guarantees **information hiding**. The standard access modifiers govern which scopes can read or write attributes and methods:
+
+1. **private:** Visible *only* within the declaring class. Absolute strongest level of encapsulation.
+2. **default (no modifier specified):** Visible only within the declaring class's *package*. Also referred to as package-private scope.
+3. **protected:** Visible to all classes inside the same package, *and* subclasses residing in external packages.
+4. **public:** Visible globally to all active classes in the program directory.
+
+---
+
+# 2. Inheritance Access Scopes Checklist
+For the exit exam, check this access eligibility matrix when tracing subclass attributes:
+* Subclasses *always* inherit fields of the superclass, but they cannot directly reference members declared as \`private\`.
+* Subclasses residing in *external* packages can reference \`protected\` fields directly, but they cannot reference \`default\` package-private fields.
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_oop_2_1",
+            questionText: "If you want to allow subclasses to access data fields defined in the superclass, but deny access to non-subclasses, which access modifier is appropriate?",
+            options: [
+              "public",
+              "protected",
+              "private",
+              "default"
+            ],
+            correctAnswer: "B",
+            explanation: "The 'protected' access modifier is designed for this exact inheritance scenario, permitting access strictly to subclasses while blocking random external packages."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Computer Networks",
+    chapters: [
+      {
+        chapterId: "net_ch1",
+        chapterNumber: 1,
+        title: "OSI Reference Model Layers, Protocol Sockets, and Hardware Routing",
+        summary: "Examine Layer 1 to Layer 7 protocols, port routing, and bridges/switches/gateways operations.",
+        contentMarkdown: `
+# 1. The 7-Layer OSI Reference Model
+
+The Open Systems Interconnection (OSI) model standardizes network communication protocols:
+
+* **Layer 4 - Transport Layer:** Responsible for process-to-process delivery, flow control, and error recovery. Uses **port numbers** (e.g. HTTP on port 80) to multiplex/demultiplex segment streams to target socket processes.
+* **Layer 3 - Network Layer:** Formulates packets and manages logical addressing using IP. Handles end-to-end multi-hop routing of data.
+* **Layer 2 - Data Link Layer:** Organizes bits into frames and guarantees point-to-point connection integrity on a local segment. Handles MAC addressing, error detection (FCS), and flow control (local).
+
+---
+
+# 2. Local Network Hardware Devices
+* **Repeater/Hub (Physical Layer):** Regenerates weak signals, blindly broadcasting bit streams to all connected lines.
+* **Bridge/Switch (Data Link Layer):** Filter frames selectively by reading target **MAC physical addresses** inside a local segment.
+* **Router (Network Layer):** Forwards packet datagrams across different networks or subnets by reading target logical **IP addresses**.
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_net_1_1",
+            questionText: "At which layer of the OSI model do network devices like bridges, switches, and Network Interface Cards (NIC) primarily operate?",
+            options: [
+              "Physical layer",
+              "Data link layer",
+              "Network layer",
+              "Transport layer"
+            ],
+            correctAnswer: "B",
+            explanation: "Bridges, switches, and NIC layers process MAC physical addresses to forward frames locally, placing them squarely in the Data Link Layer (Layer 2)."
+          }
+        ]
+      },
+      {
+        chapterId: "net_ch2",
+        chapterNumber: 2,
+        title: "Switching Architectures: Circuit Switching vs. Packet Switching",
+        summary: "Compare resource reservation, dedicated pipelines, scalability limits, and bandwidth sharing.",
+        contentMarkdown: `
+# 1. Circuit Switching: Dedicated Pipelines
+
+In **Circuit Switching**, a physical, dedicated end-to-end pipeline is established between the sender and receiver before any data transmission begins:
+
+* **Guaranteed Bandwidth:** Once the circuit is set up, the entire line's bandwidth is reserved for the duration of the active session.
+* **Low Latency:** Data flows through a constant, predetermined path, meaning zero routing delays once active.
+* **High Cost & Poor Scalability:** Bandwidth is wasted during silent periods because other devices cannot reuse the reserved line. It cannot easily scale to thousands of users.
+
+---
+
+# 2. Packet Switching: Dynamic Resource Sharing
+In **Packet Switching**, messages are broken down into smaller units called **packets** and sent dynamically over the network:
+* Packers are routed independently (possibly taking different paths) and are reassembled in the correct order at the destination.
+* **Shared Bandwidth:** Resources are allocated on-demand, sharing link bandwidth among multiple connections.
+* No end-to-end connection needs to be pre-established, making it highly efficient but prone to varied latency (jitter) and buffer losses under heavy load.
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_net_2_1",
+            questionText: "Which statement is correct about packet switching and circuit switching?",
+            options: [
+              "In packet switching, a dedicated end-to-end physical connection is established beforehand.",
+              "In circuit switching, link bandwidth is shared dynamically on-demand.",
+              "Packet switching is generally more efficient for bursty data traffic compared to circuit switching.",
+              "Circuit switching experiences higher packet reordering delays at the receiver."
+            ],
+            correctAnswer: "C",
+            explanation: "Packet switching uses statistical multiplexing to allocate bandwidth on-demand, making it highly efficient for bursty data streams compared to rigid circuit switching."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Software Engineering",
+    chapters: [
+      {
+        chapterId: "se_ch1",
+        chapterNumber: 1,
+        title: "SDLC Process Models and Requirement Categories",
+        summary: "Waterfall rigidity, Agile Scrum sprint cycles, and Business vs. Non-Functional requirements.",
+        contentMarkdown: `
+# 1. Waterfall vs. Agile Scrum
+
+Selecting an appropriate Software Development Life Cycle (SDLC) model determines project success:
+
+* **Waterfall Model:** A traditional sequential approach (requirements, design, coding, testing, maintenance). Phase-gates prevent advancing until current stages are signed off. This makes it structurally **rigid** and difficult to adapt to changes once code compilation begins.
+* **Agile Scrum:** An iterative framework focusing on collaborative, adaptive project management. Delivered in small, incremental releases called Sprints (usually 2-4 weeks), welcoming requirements changes at any stage.
+
+---
+
+# 2. Requirement Classifications
+* **Business Requirements:** Document high-level organizational goals and why the software project is needed.
+* **Functional Requirements:** Define active system capabilities (exactly what the system must do).
+* **Non-Functional Requirements:** Specify criteria used to judge the operation of a system (quality attributes, such as performance, security, and scalability) rather than specific behaviors.
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_se_1_1",
+            questionText: "Which software process model expects sequential completion of phases and is least suitable for projects with rapidly changing requirements?",
+            options: [
+              "Rational Unified Process (RUP)",
+              "Waterfall model",
+              "Agile Scrum",
+              "Incremental prototyping"
+            ],
+            correctAnswer: "B",
+            explanation: "The Waterfall model is notoriously rigid, requiring requirements to be finalized at the absolute start, making changing requests highly difficult to accommodate."
+          }
+        ]
+      },
+      {
+        chapterId: "se_ch2",
+        chapterNumber: 2,
+        title: "Software Verification, Validation, and Maintenance Types",
+        summary: "Verify vs validate, testing scopes (integration, regression, acceptance), and the active categories of software changes.",
+        contentMarkdown: `
+# 1. Verification vs. Validation
+
+For the national CS exam, memorize these definitions:
+* **Verification ('Are we building the product right?'):** Reviews design documents, static checks, walkthroughs, and inspections to verify conformance to specification.
+* **Validation ('Are we building the right product?'):** Active testing of compiled binaries against user/client expectations (requires running the software).
+
+---
+
+# 2. Classifying Software Testing Scopes
+* **Unit Testing:** Validates isolated methods, modules, or code objects (usually written by developers).
+* **Integration Testing:** Checks compatibility and correct data flow at interface boundaries of combined modules.
+* **Regression Testing:** Re-running previous tests after an update to ensure modifications have not introduced new bugs into existing code.
+* **User Acceptance Testing (UAT):** Client-led tests demonstrating that the system satisfies their actual business requirements.
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_se_2_1",
+            questionText: "Which type of testing should be performed after a major code hotfix to guarantee that the changes did not introduce regression anomalies in previously working areas?",
+            options: [
+              "Acceptance testing",
+              "Beta testing",
+              "Integration testing",
+              "Regression testing"
+            ],
+            correctAnswer: "D",
+            explanation: "Regression testing specifically confirms that code changes or updates have not inadvertently broken existing, stable functionalities."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Web Development",
+    chapters: [
+      {
+        chapterId: "web_ch1",
+        chapterNumber: 1,
+        title: "Web Standards: HTML5, CSS Styling Rules, and JavaScript Core Scopes",
+        summary: "Learn HTML5 doc declarations, CSS specificity, JavaScript loosely-typed characteristics, and DOM structures.",
+        contentMarkdown: `
+# 1. HTML5 and Document Type Declarations
+
+Modern web pages require standardized structure frameworks:
+* **DOCTYPE:** The declaration \`<!DOCTYPE html>\` is placed at the absolute top of HTML documents to notify browsers to parse pages in standard HTML5 mode.
+* **Semantic Elements:** Standard layout items include \`<address>\`, \`<caption>\`, \`<aside>\`, and \`<section>\`.
+
+---
+
+# 2. JavaScript: Loosely Typed Execution
+JavaScript is a **loosely-typed** (or dynamically typed) scripting language. Variables do not require compile-time type declarations:
+\`\`\`javascript
+var data = "CS prep"; // Starts as string
+data = 42;           // Re-assignable to number dynamically
+\`\`\`
+While this provides massive speed and flexibility, it is prone to implicit casting traps like:
+\`\`\`javascript
+let x = 4 + "4"; // JavaScript implicitly casts the number 4 to string, yielding exactly "44"!
+\`\`\`
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_web_1_1",
+            questionText: "What is the console output of the JavaScript statement 'Math.floor(5.9)'?",
+            options: [
+              "5",
+              "6",
+              "5.9",
+              "1"
+            ],
+            correctAnswer: "A",
+            explanation: "Math.floor() rounds a double/float down to the next lowest integer. For 5.9, it yields 5. If it were Math.ceil(5.9), it would yield 6."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    category: "Theory of Computation",
+    chapters: [
+      {
+        chapterId: "toc_ch1",
+        chapterNumber: 1,
+        title: "Languages, Grammars, and Turing Decidability Limits",
+        summary: "Chomsky hierarchy limits, regular expressions, and formal Computability theory.",
+        contentMarkdown: `
+# 1. Chomsky Hierarchy of Languages
+
+The Chomsky hierarchy classifies formal grammars by their generative limits:
+
+1. **Regular Languages (Type 3):** Recognized by **Finite Automata** (DFA/NFA). Have zero memory beyond the active state.
+2. **Context-Free Languages (Type 2):** Recognized by **Pushdown Automata** (PDA), which use a single **Stack** for memory.
+3. **Context-Sensitive Languages (Type 1):** Recognized by Linear Bounded Automata.
+4. **Recursively Enumerable (Type 0):** Recognized by the highly versatile **Turing Machine**.
+
+---
+
+# 2. Computability vs. Complexity
+* **Computability Theory:** Solves the core question of whether a problem is **decidable at all** by any computational model, regardless of infinite resources (e.g., the Halting Problem is proved to be undecidable).
+* **Complexity Theory:** Explores decidable problems, evaluating the exact time and memory resources required for completion (e.g., classifies systems as P vs. NP).
+`,
+        checkpointQuestions: [
+          {
+            id: "chk_toc_1_1",
+            questionText: "Which branch of theoretical computer science deals with whether a problem is decidable or undecidable on general Turing Machines?",
+            options: [
+              "Computability theory",
+              "Complexity theory",
+              "Automata parsing theory",
+              "Set theory"
+            ],
+            correctAnswer: "A",
+            explanation: "Computability theory evaluates the binary boundaries of decidability and solvability on formal computational machines."
+          }
+        ]
+      }
+    ]
   }
 ];
 

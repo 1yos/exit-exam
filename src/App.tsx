@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar";
 import Dashboard from "./components/Dashboard";
 import Lessons from "./components/Lessons";
 import StudyNotes from "./components/StudyNotes";
+import QuestionBrowser from "./components/QuestionBrowser";
 import Practice from "./components/Practice";
 import MockExam from "./components/MockExam";
 import Flashcards from "./components/Flashcards";
@@ -266,6 +267,15 @@ export default function App() {
               progress={progress} 
               saveProgress={saveProgress} 
               onAskTutor={handleAskTutor}
+            />
+          )}
+
+          {activeTab === "questions" && (
+            <QuestionBrowser 
+              progress={progress} 
+              saveProgress={saveProgress} 
+              onAskTutor={handleAskTutor}
+              setActiveTab={setActiveTab}
             />
           )}
 
