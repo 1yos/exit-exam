@@ -24,7 +24,7 @@ export interface Question {
   wrongOptionsExplanation?: {
     [key: string]: string; // For MCQ: explanation of why A, B, C or D are wrong
   };
-  source: "Seeded (Aman Nigussu)" | "AAU Exit Model Paper 2023" | "AI Generated" | "User Upload";
+  source: "Seeded (Aman Nigussu)" | "AAU Exit Model Paper 2023" | "AI Generated" | "User Upload" | "MoE License Prep Blueprint";
   relatedConcepts?: string[];
   codeSnippet?: string; // Optional code snippet to display
   userAnswer?: string; // Optional for active test state

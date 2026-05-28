@@ -983,6 +983,360 @@ System.out.print(sum);`,
     },
     source: "AAU Exit Model Paper 2023",
     relatedConcepts: ["AI Agent Primitives", "Percept Sequence", "Rational Action"]
+  },
+  {
+    id: "moe_31",
+    category: "Computer Networks",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Medium,
+    questionText: "For an IP block of 192.168.10.0/27, what is the correct subnet mask and the maximum number of usable host addresses that can be assigned to active nodes?",
+    options: [
+      "255.255.255.224 and 30 usable host addresses",
+      "255.255.255.192 and 62 usable host addresses",
+      "255.255.255.240 and 14 usable host addresses",
+      "255.255.255.128 and 32 usable host addresses"
+    ],
+    correctAnswer: "A",
+    explanation: "A /27 subnet mask has 27 ones in binary, which is 255.255.255.224 in decimal notation. This leaves 32 - 27 = 5 bits for the host ID. The total IP block is 2^5 = 32 addresses. Subtracting 2 for the Network ID and Broadcast ID leaves 30 usable host addresses.",
+    wrongOptionsExplanation: {
+      "B": "This calculates a /26 subnet configuration (mask 255.255.255.192 with 62 hosts).",
+      "C": "This calculates a /28 subnet configuration (mask 255.255.255.240 with 14 hosts).",
+      "D": "This calculates a /25 subnet and omits subtracting the network and broadcast addresses."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Subnetting Math", "Usable Hosts", "CIDR Notation"]
+  },
+  {
+    id: "moe_32",
+    category: "Data Structures & Algorithms",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Medium,
+    questionText: "Given a Binary Search Tree (BST) containing integers. Which traversal sequence is guaranteed to visit the nodes and return these elements in sorted ascending order?",
+    options: [
+      "Postorder Traversal (L -> R -> N)",
+      "Preorder Traversal (N -> L -> R)",
+      "Inorder Traversal (L -> N -> R)",
+      "Levelorder Breadth-First Traversal"
+    ],
+    correctAnswer: "C",
+    explanation: "By mathematical design, an Inorder Traversal visits the left subtree, the root node, and then the right subtree. In a Binary Search Tree, all elements smaller than the root are in the left subtree, and all larger elements are in the right subtree. Therefore, Inorder traversal is guaranteed to output elements in sorted ascending order.",
+    wrongOptionsExplanation: {
+      "A": "Postorder is typically used for node deletion or postfix mathematical notations.",
+      "B": "Preorder matches top-down recursive copies of tree structures.",
+      "D": "Levelorder sweeps level by level using a queue, which does not output elements sorted."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Binary Search Tree", "Inorder Traversal", "Systematic Sorts"]
+  },
+  {
+    id: "moe_33",
+    category: "Theory of Computation",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Hard,
+    questionText: "Which of the following languages cannot be modeled and recognized by a Deterministic Finite Automaton (DFA)?",
+    options: [
+      "The set of all binary strings containing an even number of zeros.",
+      "The language L = { a^n b^n | n >= 0 } of matching balances.",
+      "The set of all strings over {a, b} that end in 'abb'.",
+      "The language of all binary numbers divisible by 3."
+    ],
+    correctAnswer: "B",
+    explanation: "The language L = { a^n b^n | n >= 0 } requires an arbitrary level of memory to count the number of 'a's and ensure that exactly that many 'b's follow. A Finite Automaton (DFA) has a finite state limit and no stack, so it cannot count to infinity. To recognize L, a Pushdown Automaton (PDA) with stack capability is required.",
+    wrongOptionsExplanation: {
+      "A": "This is a regular language which requires a simple 2-state switching DFA.",
+      "C": "This is closed and finite, easily modeled with a 4-state transition DFA.",
+      "D": "This can be modeled using a 3-state DFA representing remainder positions (0, 1, 2) when modular arithmetic is applied."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Pumping Lemma", "Regular Languages", "Chomsky Type-3 Limit"]
+  },
+  {
+    id: "moe_34",
+    category: "Software Engineering",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Medium,
+    questionText: "In UML class modeling, which structural relationship represents a strong ownership pattern where part objects are completely dependent on their container, meaning they are deleted along with it?",
+    options: [
+      "Aggregation (Empty Diamond Notation)",
+      "Composition (Filled Diamond Notation)",
+      "Dependency (Dashed Arrow Notation)",
+      "Generalization (Solid Arrow with Hollow Triangle)"
+    ],
+    correctAnswer: "B",
+    explanation: "Composition is a strict form of association representing a 'has-a' relationship. The lifecycle of the parts is governed by the container; if the container is destroyed, all its composite parts are likewise destroyed.",
+    wrongOptionsExplanation: {
+      "A": "Aggregation is a weak structural relationship; the parts can exist independently of the container (e.g., student in a department).",
+      "C": "Dependency represent momentary usage relation, usually on local arguments.",
+      "D": "Generalization represents inheritance structures (superclass vs subclass relationships)."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["UML Class Relationships", "Composition Ownership", "Aggregation Principles"]
+  },
+  {
+    id: "moe_35",
+    category: "Programming Fundamentals",
+    type: QuestionType.CodeTracing,
+    difficulty: Difficulty.Hard,
+    questionText: "What is the final value of the variable 'result' after executing this C++ code block?",
+    codeSnippet: `int x = 4;
+int result = ++x * 2 + x++ * 3;`,
+    options: [
+      "22",
+      "25",
+      "24",
+      "20"
+    ],
+    correctAnswer: "B",
+    explanation: "Let's trace the expression step-by-step:\n- ++x is a prefix increment. x is incremented in memory from 4 to 5, and then returns 5. The first operand evaluates to `5 * 2 = 10`.\n- Next, x stands at 5. x++ is a postfix increment. It evaluates to the current value of x, which is 5. So, the second operand evaluates to `5 * 3 = 15`. After this operation completes, x becomes 6 in memory.\n- The sum is `10 + 15 = 25`.",
+    wrongOptionsExplanation: {
+      "A": "This assumes the postfix value didn't execute immediately or was evaluated differently.",
+      "C": "This mistakes the timing of the prefix increment multiplier.",
+      "D": "This is based on an incorrect evaluation of both prefix and postfix rules."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Unary Operators Precedence", "Tracing Registers", "Pre-increment vs Post-increment"]
+  },
+  {
+    id: "moe_36",
+    category: "Object-Oriented Programming",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Easy,
+    questionText: "What occurs when a subclass in Java or C++ declares a method with the exact same name, return type, and argument list of an existing method in its superclass?",
+    options: [
+      "Method Overloading",
+      "Method Hiding",
+      "Method Overriding",
+      "Dynamic Compilation Link Error"
+    ],
+    correctAnswer: "C",
+    explanation: "Declaring a method in a subclass with the same signature (name, parameters, return type) is called Method Overriding. This enables dynamic dispatch, where the subclass's override method is executed at runtime based on the actual object instance.",
+    wrongOptionsExplanation: {
+      "A": "Overloading represents declaring methods with the same name but different argument counts or types (resolved at compile-time).",
+      "B": "Method Hiding occurs when a subclass redefines static methods of its parent class.",
+      "D": "There is no compilation error; this is a core OOP feature enabling virtual class structures."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Runtime Polymorphism", "Method Signatures", "Dynamic Dispatch"]
+  },
+  {
+    id: "moe_37",
+    category: "Operating Systems",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Medium,
+    questionText: "In a paged virtual memory system, the page size is 4KB (4096 bytes). If a process generates a logical address of 12300, what is the mapped Page Number and the corresponding Offset inside that page?",
+    options: [
+      "Page Number = 3, Offset = 12",
+      "Page Number = 2, Offset = 8",
+      "Page Number = 3, Offset = 12300",
+      "Page Number = 2, Offset = 4108"
+    ],
+    correctAnswer: "A",
+    explanation: "To find the Page Number, divide the logical address by the page size: `12300 / 4096 = 3.0029`, meaning we are on Page 3 (0-indexed: Page 0 is 0-4095, Page 1 is 4096-8191, Page 2 is 8192-12287, and Page 3 is 12288-16383). \nThe offset is the remainder: `12300 % 4096 = 12300 - (3 * 4096) = 12300 - 12288 = 12`.",
+    wrongOptionsExplanation: {
+      "B": "Incorrectly divides the address blocks, missing the offset remainder location.",
+      "C": "Offset cannot exceed page size limit (4096).",
+      "D": "This is mathematically wrong and places the offset outside the boundaries of a 4KB chunk."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Paging calculations", "Offset Limits", "Memory Management Unit"]
+  },
+  {
+    id: "moe_38",
+    category: "Database Systems",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Medium,
+    questionText: "A database table R(A, B, C, D) has a composite primary key consisting of attributes (A, B). If the functional dependency B -> C exists, which of the normal forms is violated?",
+    options: [
+      "First Normal Form (1NF)",
+      "Second Normal Form (2NF)",
+      "Third Normal Form (3NF)",
+      "Boyce-Codd Normal Form (BCNF)"
+    ],
+    correctAnswer: "B",
+    explanation: "The functional dependency B -> C is a Partial Key Dependency because non-key attribute C depends on a subset (B) of the complete composite primary key (A, B). Second Normal Form (2NF) prohibits partial key dependencies (all non-key fields must be fully functionally dependent on the entire primary key). Thus, 2NF is violated.",
+    wrongOptionsExplanation: {
+      "A": "1NF is not violated because the attributes are atomic.",
+      "C": "A table must satisfy 2NF before being checked for 3NF transitive dependencies.",
+      "D": "A schema cannot reach BCNF if it fails to satisfy the rules of 2NF first."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Relational Integrity Constraints", "Partial Dependencies", "2NF Violations"]
+  },
+  {
+    id: "moe_39",
+    category: "Computer Networks",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Easy,
+    questionText: "Which layer of the standard ISO/OSI Reference Model is responsible for routing packets across interconnected networks using logical IP addresses?",
+    options: [
+      "Data Link Layer (Layer 2)",
+      "Network Layer (Layer 3)",
+      "Transport Layer (Layer 4)",
+      "Physical Layer (Layer 1)"
+    ],
+    correctAnswer: "B",
+    explanation: "The Network Layer (Layer 3) handles the logical addressing and routing of packets across networks. Standard devices operating at this layer include routers, which evaluate IP block targets to find optimal pathways.",
+    wrongOptionsExplanation: {
+      "A": "Data Link layer moves frames locally using hardware physical MAC addresses inside a single segment.",
+      "C": "Transport layer manages end-to-end reliability, sequence numbers, and port addressing.",
+      "D": "Physical layer works with raw sequence streams of physical electrical bits and copper lines."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["OSI Layer Models", "Logical Routing", "Routers and Switches"]
+  },
+  {
+    id: "moe_40",
+    category: "Theory of Computation",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Hard,
+    questionText: "The Halting Problem, which asks whether a general computer program will eventually finish running or execute infinitely for a given input, is scientifically proved to be:",
+    options: [
+      "Decidable for any Turing Machine.",
+      "Undecidable for general computational systems.",
+      "Decidable on deterministic systems only.",
+      "Solvable in polynomial time (P)."
+    ],
+    correctAnswer: "B",
+    explanation: "Alan Turing proved in 1936 that no general algorithm can exist that correctly solves the Halting Problem for all possible program-input pairs. Thus, the Halting Problem is one of the classic examples of an undecidable problem.",
+    wrongOptionsExplanation: {
+      "A": "It is proved to be undecidable on Turing machines.",
+      "C": "Deterministic or non-deterministic systems make no difference; it cannot be decided generally.",
+      "D": "Since it cannot be solved at all, it does not belong in class P or any other decidable complexity class."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Computability Theory", "Undecidable Languages", "Alan Turing Proof"]
+  },
+  {
+    id: "moe_41",
+    category: "Data Structures & Algorithms",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Medium,
+    questionText: "What is the asymptotic worst-case execution time (Big-O) of an algorithm with two nested loops, where the outer loop iterates n times and the inner loop iterates n/2 times?",
+    options: [
+      "O(n log n)",
+      "O(n)",
+      "O(n^2)",
+      "O(2^n)"
+    ],
+    correctAnswer: "C",
+    explanation: "The total iterations is computed as: n * (n / 2) = (n^2) / 2. In asymptotic Big-O notation, constant factors like 1/2 are ignored. The dominant growth term is quadratic, so the worst-case time complexity is O(n^2).",
+    wrongOptionsExplanation: {
+      "A": "This describes linearithmic algorithms (like Merge Sort).",
+      "B": "This represents linear single-loop algorithms.",
+      "D": "This represents exponential algorithms (like recursive solutions to towers of Hanoi)."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Quadratic Growth Rates", "Big-O Precedence Rules", "Code Nested Loops Analysis"]
+  },
+  {
+    id: "moe_42",
+    category: "Software Engineering",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Easy,
+    questionText: "Which software testing methodology requires complete, fine-grained visibility into the internal code structures, control branches, loop conditions, and execution paths?",
+    options: [
+      "Black-Box Testing",
+      "User Acceptance Testing",
+      "White-Box Testing",
+      "System Recovery Testing"
+    ],
+    correctAnswer: "C",
+    explanation: "White-box testing (or structural testing) requires complete visibility into the source code. Testers design test inputs to ensure maximum coverage of lines, paths, conditions, and logical branches in the program.",
+    wrongOptionsExplanation: {
+      "A": "Black-box testing covers functional inputs and outputs without any access to the internal code structures.",
+      "B": "User Acceptance testing mimics simple business use scenarios by clients, separate from code details.",
+      "D": "System Recovery tests structural safety tolerances after artificial crashes or network losses."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Testing Methodologies", "Structural Coverage Analysis", "Whitebox Bounds"]
+  },
+  {
+    id: "moe_43",
+    category: "Operating Systems",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Medium,
+    questionText: "In Operating Systems concurrency design, Coffman's rules define four conditions that must occur simultaneously for a deadlock to build. What does the 'Circular Wait' condition imply?",
+    options: [
+      "Processes must cycle through states in ready, blocked, and active queues in a circular pattern.",
+      "There is a closed chain of processes where each process holds resources and waits for resources held by the next process in the chain.",
+      "Resources must be returned in a circular pipeline to prevent system crashes.",
+      "If a lock is obtained, it must cycle back to the main CPU resource queue within a single thread tick."
+    ],
+    correctAnswer: "B",
+    explanation: "The Circular Wait condition specifies that a closed loop of processes {P0, P1, ..., Pn} exists where P0 is waiting for a resource held by P1, P1 is waiting for P2, and Pn is waiting for a resource held by P0.",
+    wrongOptionsExplanation: {
+      "A": "This refers to process lifecycle management inside ready queues, not deadlock locking conditions.",
+      "C": "Resource pipelining has nothing to do with Coffman's conditions.",
+      "D": "Lock limits are governed by access variables, not cyclic thread rotations."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Coffman Conditions", "Concurrency Deadlocks", "Circular Dependency Structures"]
+  },
+  {
+    id: "moe_44",
+    category: "Database Systems",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Easy,
+    questionText: "The Entity Integrity rule in standard relational database systems specifies that:",
+    options: [
+      "A foreign key must refer to a valid primary key or be set to null.",
+      "Every value in a column must satisfy a pre-defined range constraint.",
+      "No primary key attribute (or prime attribute of a composite key) can contain a null value.",
+      "Different tables must have distinct file locations on disk."
+    ],
+    correctAnswer: "C",
+    explanation: "The Entity Integrity rule states that primary keys uniquely identify tuples in a relation. If primary key attributes were allowed to be null, tuples could not be distinguished from one another. Hence, primary keys must never be null.",
+    wrongOptionsExplanation: {
+      "A": "This defines the Referential Integrity constraint.",
+      "B": "This defines domain-level values checklist constraints.",
+      "D": "Storage boundaries belong to physical levels, not logical integrity constraints."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Entity Integrity Constraints", "Relational Model Integrity Rules", "Primary Key Constraints"]
+  },
+  {
+    id: "moe_45",
+    category: "Programming Fundamentals",
+    type: QuestionType.CodeTracing,
+    difficulty: Difficulty.Medium,
+    questionText: "Trace this C++ statement: 'int a = 0, b = 5; if (a && ++b) { b += 10; }'. What is the value of 'b' after execution completes?",
+    options: [
+      "15",
+      "6",
+      "5",
+      "16"
+    ],
+    correctAnswer: "C",
+    explanation: "This is a short-circuit AND evaluation trap. The expression evaluates `a && ++b`. Since `a == 0` (which is false), the logical AND operator already knows the overall condition must be false. Therefore, the compiler short-circuits and skips evaluating the second expression, `++b`. Thus, `b` is never incremented, and remains 5. The block inside the 'if' is skipped as well, leaving `b = 5`.",
+    wrongOptionsExplanation: {
+      "A": "This assumes both the increment and the interior block executed.",
+      "B": "This assumes the increment executed but the interior block was skipped.",
+      "D": "This is based on evaluating both components incorrectly."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Lazy Evaluation", "Short-Circuit AND Gates", "Logical Tracing Rules"]
+  },
+  {
+    id: "moe_46",
+    category: "Object-Oriented Programming",
+    type: QuestionType.MCQ,
+    difficulty: Difficulty.Easy,
+    questionText: "In Java, if a developer wants to make a class attribute visible to subclasses in other packages, but hide it from random unrelated classes in the application, which access modifier should be declared?",
+    options: [
+      "private",
+      "default (no modifier specified)",
+      "protected",
+      "public"
+    ],
+    correctAnswer: "C",
+    explanation: "The protected modifier specifies that elements are visible within classes of the same package, and additionally to any subclasses of that class, even if they reside in different packages.",
+    wrongOptionsExplanation: {
+      "A": "Private fields are visible ONLY within the declaring class itself.",
+      "B": "Default scope (package-private) denies access to classes residing outside the package, including subclasses.",
+      "D": "Public fields are exposed globally to all classes in the entire application scope, which violates information hiding."
+    },
+    source: "MoE License Prep Blueprint",
+    relatedConcepts: ["Information Hiding", "Package Directories Mapping", "Access Modifiers Matrix"]
   }
 ];
 

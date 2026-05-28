@@ -82,6 +82,131 @@ export default function AITutor({
     setActiveTutorQuestion(null);
   };
 
+  // Helper to parse bold (**text**) and inline code (`code`) within text lines
+  const parseInlineTokens = (rawText: string) => {
+    // Splits by **...** and `...` preserving tokens for beautiful inline markup
+    const tokens = rawText.split(/(\*\*.*?\*\*|`.*?`)/g);
+
+    return tokens.map((token, idx) => {
+      if (token.startsWith("**") && token.endsWith("**")) {
+        return (
+          <strong key={idx} className="font-bold text-white">
+            {token.substring(2, token.length - 2)}
+          </strong>
+        );
+      }
+      if (token.startsWith("`") && token.endsWith("`")) {
+        return (
+          <code key={idx} className="font-mono text-[10px] bg-white/5 text-[#F27D26] border border-white/5 px-1.5 py-0.5 rounded-lg inline-block">
+            {token.substring(1, token.length - 1)}
+          </code>
+        );
+      }
+      return token;
+    });
+  };
+
+  const renderMessageText = (text: string, isUser: boolean) => {
+    if (isUser) {
+      return <p className="whitespace-pre-line leading-relaxed">{text}</p>;
+    }
+
+    // Split text by codeblocks
+    const parts = text.split(/(```[\s\S]*?```)/g);
+
+    return (
+      <div className="space-y-3 leading-relaxed text-[#E0E0E0]">
+        {parts.map((part, index) => {
+          if (part.startsWith("```")) {
+            // It's a code block!
+            const lines = part.split("\n");
+            let language = "";
+            let codeLines = lines.slice(1);
+            if (lines[0].length > 3) {
+              language = lines[0].substring(3).trim();
+            }
+            if (codeLines[codeLines.length - 1].startsWith("```")) {
+              codeLines = codeLines.slice(0, -1);
+            }
+            const code = codeLines.join("\n").trim();
+
+            return (
+              <div key={index} className="my-3 rounded-xl overflow-hidden border border-white/10 bg-black/45 shadow-inner">
+                {language && (
+                  <div className="bg-white/3 border-b border-white/5 px-4 py-1.5 flex justify-between items-center text-[9px] uppercase font-mono tracking-widest text-white/50">
+                    <span>{language}</span>
+                    <span className="text-[#F27D26] uppercase text-[8px] font-bold">Syntactically Grounded</span>
+                  </div>
+                )}
+                <pre className="p-4 font-mono text-[11px] overflow-x-auto text-[#ff9e59] leading-6">
+                  <code>{code}</code>
+                </pre>
+              </div>
+            );
+          } else {
+            // It's standard text which might contain headings, list items, bold markers, and inline code!
+            const lines = part.split("\n");
+            return (
+              <div key={index} className="space-y-1.5">
+                {lines.map((line, lineIdx) => {
+                  const trimmed = line.trim();
+
+                  // 1. Check for headings
+                  if (trimmed.startsWith("###")) {
+                    return (
+                      <h4 key={lineIdx} className="text-xs font-bold text-white uppercase tracking-wider border-b border-white/5 pb-1 mt-3">
+                        {trimmed.substring(3).trim()}
+                      </h4>
+                    );
+                  }
+                  if (trimmed.startsWith("##")) {
+                    return (
+                      <h3 key={lineIdx} className="text-xs font-bold text-[#F27D26] tracking-tight mt-4 border-l-2 border-[#F27D26] pl-2 uppercase font-mono">
+                        {trimmed.substring(2).trim()}
+                      </h3>
+                    );
+                  }
+                  if (trimmed.startsWith("#")) {
+                    return (
+                      <h2 key={lineIdx} className="text-sm font-serif italic font-bold text-white tracking-tight mt-5">
+                        {trimmed.substring(1).trim()}
+                      </h2>
+                    );
+                  }
+
+                  // 2. Check for bullet list items
+                  if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+                    const content = trimmed.substring(2);
+                    return (
+                      <div key={lineIdx} className="flex items-start space-x-2 pl-3 my-1">
+                        <span className="text-[#F27D26] text-xs font-bold mt-0.5">•</span>
+                        <p className="text-white/80 leading-relaxed text-xs font-normal">
+                          {parseInlineTokens(content)}
+                        </p>
+                      </div>
+                    );
+                  }
+
+                  // Skip empty line or space spacer
+                  if (!trimmed) {
+                    return <div key={lineIdx} className="h-1.5" />;
+                  }
+
+                  // 3. Regular Paragraph with inline formatting
+                  return (
+                    <p key={lineIdx} className="text-white/80 text-xs leading-relaxed font-normal">
+                      {parseInlineTokens(line)}
+                    </p>
+                  );
+                })}
+              </div>
+            );
+          }
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:h-[calc(100vh-12rem)] md:min-h-[500px]" id="ai-tutor-tab">
       
@@ -200,9 +325,7 @@ export default function AITutor({
                     ? "bg-[#F27D26] text-black font-semibold rounded-br-none" 
                     : "bg-white/5 text-[#E0E0E0] border border-white/5 rounded-bl-none"
                 }`}>
-                  <p className="whitespace-pre-line leading-relaxed">
-                    {msg.text}
-                  </p>
+                  {renderMessageText(msg.text, isUser)}
                 </div>
               </div>
             );
