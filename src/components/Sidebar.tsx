@@ -9,7 +9,8 @@ import {
   Sun, 
   Moon, 
   Sparkles,
-  Bookmark
+  Bookmark,
+  ChevronLeft
 } from "lucide-react";
 
 interface SidebarProps {
@@ -20,6 +21,8 @@ interface SidebarProps {
   studyStreak: number;
   isOpen: boolean;
   onClose: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 export default function Sidebar({ 
@@ -29,7 +32,9 @@ export default function Sidebar({
   setDarkMode, 
   studyStreak,
   isOpen,
-  onClose
+  onClose,
+  isCollapsed = false,
+  onToggleCollapse
 }: SidebarProps) {
   
   const navItems = [
@@ -55,8 +60,12 @@ export default function Sidebar({
       {/* Sidebar Container */}
       <aside 
         id="sidebar-container" 
-        className={`fixed top-0 left-0 h-screen w-64 bg-[#0A0A0A] border-r border-subtle flex flex-col justify-between z-50 p-6 transition-transform duration-300 md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed top-0 left-0 h-screen w-64 bg-[#0A0A0A] border-r border-subtle flex flex-col justify-between z-50 p-6 transition-transform duration-300 ${
+          isOpen 
+            ? "translate-x-0" 
+            : isCollapsed 
+              ? "-translate-x-full" 
+              : "-translate-x-full md:translate-x-0"
         }`}
       >
         {/* Platform Header */}
@@ -66,16 +75,29 @@ export default function Sidebar({
               <h1 className="text-2xl font-serif italic font-bold text-[#F27D26] tracking-tight">CS.Exit</h1>
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">Exam Prep Engine</p>
             </div>
-            {/* Mobile close button inside the sidebar drawer */}
-            <button 
-              onClick={onClose}
-              className="md:hidden p-1 rounded-lg hover:bg-white/5 text-white/50 hover:text-white"
-              aria-label="Close menu"
-            >
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <div className="flex items-center space-x-1">
+              {/* Desktop collapse button */}
+              {onToggleCollapse && (
+                <button
+                  onClick={onToggleCollapse}
+                  className="hidden md:flex p-1.5 rounded-lg hover:bg-white/5 border border-transparent hover:border-white/10 text-white/50 hover:text-white transition-all duration-150 cursor-pointer"
+                  title="Collapse Sidebar"
+                  aria-label="Collapse Sidebar"
+                >
+                  <ChevronLeft className="h-4.5 w-4.5" />
+                </button>
+              )}
+              {/* Mobile close button inside the sidebar drawer */}
+              <button 
+                onClick={onClose}
+                className="md:hidden p-1 rounded-lg hover:bg-white/5 text-white/50 hover:text-white"
+                aria-label="Close menu"
+              >
+                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Navigation Actions */}

@@ -15,6 +15,20 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("cs_exit_sidebar_collapsed") === "true";
+    }
+    return false;
+  });
+
+  const toggleSidebarCollapsed = () => {
+    setIsSidebarCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem("cs_exit_sidebar_collapsed", String(next));
+      return next;
+    });
+  };
   
   // Question context for AI tutor
   const [activeTutorQuestion, setActiveTutorQuestion] = useState<Question | null>(null);
@@ -124,19 +138,29 @@ export default function App() {
         studyStreak={progress.studyStreak}
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={toggleSidebarCollapsed}
       />
 
       {/* Main Viewport Container */}
-      <main className="flex-1 pl-0 md:pl-64 min-h-screen relative flex flex-col justify-between">
+      <main className={`flex-1 ${isSidebarCollapsed ? "pl-0" : "pl-0 md:pl-64"} min-h-screen relative flex flex-col justify-between transition-all duration-300`}>
         
         {/* Header Ribbon bar */}
         <header className="sticky top-0 right-0 h-16 border-b border-subtle bg-[#0A0A0A]/85 backdrop-blur-md z-20 flex items-center justify-between px-4 sm:px-8">
           <div className="flex items-center space-x-2">
-            {/* Mobile menu trigger */}
+            {/* Menu trigger button (desktop toggles collapse, mobile toggles drawer) */}
             <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="md:hidden p-2 -ml-1 mr-1 rounded-lg hover:bg-white/5 text-white/80 transition-colors cursor-pointer"
-              aria-label="Open menu"
+              onClick={() => {
+                if (window.innerWidth >= 768) {
+                  toggleSidebarCollapsed();
+                } else {
+                  setIsSidebarOpen(true);
+                }
+              }}
+              className={`${
+                isSidebarCollapsed ? "flex" : "flex md:hidden"
+              } p-2 -ml-1 mr-1 rounded-lg hover:bg-white/5 text-white/80 transition-colors cursor-pointer`}
+              aria-label="Toggle menu"
             >
               <Menu className="h-5 w-5" />
             </button>
